@@ -26,16 +26,21 @@ fi
 curl --fail --retry 6 -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash
 yum install gitlab-runner-${gitlab_runner_version} -y
 
-if [[ `echo ${docker_machine_download_url}` == "" ]]
-then
-  curl --fail --retry 6 -L https://github.com/docker/machine/releases/download/v${docker_machine_version}/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
-else
-  curl --fail --retry 6 -L ${docker_machine_download_url} >/tmp/docker-machine
-fi
+#if [[ `echo ${docker_machine_download_url}` == "" ]]
+#then
+#  curl --fail --retry 6 -L https://github.com/docker/machine/releases/download/v${docker_machine_version}/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
+#else
+#  curl --fail --retry 6 -L ${docker_machine_download_url} >/tmp/docker-machine
+#fi
 
-chmod +x /tmp/docker-machine && \
-  mv /tmp/docker-machine /usr/local/bin/docker-machine && \
-  ln -s /usr/local/bin/docker-machine /usr/bin/docker-machine
+base=https://github.com/docker/machine/releases/download/v0.16.0 &&
+  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+  sudo mv /tmp/docker-machine /usr/local/bin/docker-machine &&
+  chmod +x /usr/local/bin/docker-machine
+  
+#chmod +x /tmp/docker-machine && \
+#  mv /tmp/docker-machine /usr/local/bin/docker-machine && \
+#  ln -s /usr/local/bin/docker-machine /usr/bin/docker-machine
 docker-machine --version
 
 # Create a dummy machine so that the cert is generated properly
