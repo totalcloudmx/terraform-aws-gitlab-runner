@@ -33,8 +33,8 @@ yum install gitlab-runner-${gitlab_runner_version} -y
 #  curl --fail --retry 6 -L ${docker_machine_download_url} >/tmp/docker-machine
 #fi
 
-base=https://github.com/docker/machine/releases/download/v0.16.2 &&
-  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+base=https://github.com/docker/machine/releases/download/v${docker_machine_version} &&
+  curl --fail --retry 6 -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
   sudo mv /tmp/docker-machine /usr/local/bin/docker-machine &&
   chmod +x /usr/local/bin/docker-machine
   
